@@ -9,7 +9,7 @@
     "prepublishOnly": "npm run build",
     "test": "karma start",
     "test:watch": "npm test -- --no-single-run --no-coverage",
-    "lint": "eslint 'src/**/*.js'"
+    "lint": "eslint 'src/**/*.js' --fix"
   },
   "author": {
     "name": "Adobe Systems",
@@ -27,9 +27,7 @@
     "@adobe/reactor-object-assign": "*",
     "@adobe/reactor-promise": "*",
     "@adobe/reactor-query-string": "*",
-    "@adobe/reactor-window": "*",
-    "custom-event-polyfill": "^1.0.7",
-    "rollup-plugin-node-builtins": "^2.1.2"
+    "@adobe/reactor-window": "*"
   },
   "devDependencies": {
     "camelize": "1.0.0",

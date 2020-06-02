@@ -32,7 +32,6 @@ if (_satellite && !window.__satelliteLoaded) {
   // If a consumer loads the library multiple times, make sure only the first time is effective.
   window.__satelliteLoaded = true;
 
-
   var container = _satellite.container;
 
   // Remove container in public scope ASAP so it can't be manipulated by extension or user code.
@@ -127,7 +126,6 @@ if (_satellite && !window.__satelliteLoaded) {
       getDataElementValue
     );
   });
-
   window.requestIdleCallback(function() {
     initRules(
       _satellite,
