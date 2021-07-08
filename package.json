@@ -9,7 +9,7 @@
     "prepublishOnly": "npm run build",
     "test": "karma start",
     "test:watch": "npm test -- --no-single-run --no-coverage",
-    "lint": "eslint 'src/**/*.js'"
+    "lint": "eslint 'src/**/*.js' --fix"
   },
   "author": {
     "name": "Adobe Systems",

@@ -21,11 +21,12 @@ var logger = require('./logger');
 var initRules = require('./initRules');
 var dataElementSafe = require('./dataElementSafe');
 var getNamespacedStorage = require('./getNamespacedStorage');
-
+require('custom-event-polyfill');
 var DEBUG_LOCAL_STORAGE_NAME = 'debug';
 
 
 var _satellite = window._satellite;
+window._satelliteEventQueue = [];
 
 if (_satellite && !window.__satelliteLoaded) {
   // If a consumer loads the library multiple times, make sure only the first time is effective.
@@ -117,19 +118,32 @@ if (_satellite && !window.__satelliteLoaded) {
     setCustomVar
   );
 
-  hydrateModuleProvider(
-    container,
-    moduleProvider,
-    replaceTokens,
-    getDataElementValue
-  );
-
-  initRules(
-    _satellite,
-    container.rules || [],
-    moduleProvider,
-    replaceTokens
-  );
+  window.requestIdleCallback(function() {
+    hydrateModuleProvider(
+      container,
+      moduleProvider,
+      replaceTokens,
+      getDataElementValue
+    );
+  });
+  window.requestIdleCallback(function() {
+    initRules(
+      _satellite,
+      container.rules || [],
+      moduleProvider,
+      replaceTokens
+    );
+    window._satelliteEventQueue.reverse().forEach(function(queuedEvent) {
+      try {
+        queuedEvent();
+      } catch (e) {
+        throw new Error('Custom Launch - event queue' + e.message);
+      }
+    });
+    // trigger a custom browser event when Launch is ready
+    var event = new CustomEvent('launch-active');
+    window.dispatchEvent(event);
+  });
 }
 
 // Rollup's iife option always sets a global with whatever is exported, so we'll set the
